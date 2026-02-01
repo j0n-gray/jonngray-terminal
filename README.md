@@ -1,51 +1,6 @@
 # jonngray-terminal
 
-A terminal-style portfolio website for Jonathan Gray.
-
-## Architecture Overview
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                 WORKFLOW                                    │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   ┌──────────────┐  push   ┌──────────────────┐ OIDC  ┌────────────────┐   │
-│   │   jonngray   │────────▶│     GitHub       │──────▶│      GCP       │   │
-│   │   (local)    │         │     Actions      │  Auth │   Workload     │   │
-│   └──────────────┘         │                  │       │   Identity     │   │
-│                            │  - Build Docker  │       │   Federation   │   │
-│                            │  - Push image    │       │                │   │
-│                            │  - Deploy        │       │                │   │
-│                            └────────┬─────────┘       └────────────────┘   │
-│                                     │                                       │
-│                                     ▼                                       │
-│                            ┌──────────────────┐       ┌────────────────┐   │
-│                            │    Artifact      │       │   Cloud Run    │   │
-│                            │    Registry      │──────▶│ (europe-west2) │   │
-│                            │                  │       │                │   │
-│                            │  Docker images   │       │ Serverless     │   │
-│                            └──────────────────┘       │ compute for    │   │
-│                                                       │ containers.    │   │
-│                                                       │ Autoscales     │   │
-│                                                       │ with traffic.  │   │
-│                                                       └───────┬────────┘   │
-│                                                               │            │
-└───────────────────────────────────────────────────────────────┼────────────┘
-                                                                │
-┌───────────────────────────────────────────────────────────────┼────────────┐
-│                              USER ACCESS                      │            │
-├───────────────────────────────────────────────────────────────┼────────────┤
-│                                                               │            │
-│   ┌──────────┐  HTTPS   ┌──────────────────┐     proxy        │            │
-│   │   User   │─────────▶│    Cloudflare    │──────────────────┘            │
-│   │  Browser │          │                  │                               │
-│   └──────────┘          │  - CDN / Cache   │                               │
-│                         │  - SSL           │                               │
-│      jonngray.io        │  - DDoS protect  │                               │
-│                         └──────────────────┘                               │
-│                                                                            │
-└────────────────────────────────────────────────────────────────────────────┘
-```
+A containzerized terminal-style portfolio website which is deployed automatically on pushed changes through github actions to GCP (CloudRun)
 
 ## Components
 
@@ -63,7 +18,6 @@ A terminal-style portfolio website for Jonathan Gray.
 |-----------|---------|
 | **Artifact Registry** | Stores Docker images |
 | **Cloud Run** | Serverless compute platform for containers, autoscales with traffic |
-| **Service Account** | `github-actions@jonngray-portfolio` - deployment permissions |
 
 ### DNS & CDN
 
