@@ -6,13 +6,17 @@ on:
       - main
 
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  PROJECT_ID: jonngray-portfolio
   REGION: europe-west2
   SERVICE_NAME: jonngray-portfolio
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - name: Checkout code
@@ -21,7 +25,8 @@ jobs:
       - name: Google Auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: projects/408373805026/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-actions@jonngray-portfolio.iam.gserviceaccount.com
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
