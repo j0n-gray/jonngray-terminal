@@ -569,107 +569,60 @@
     const CV_DATA = {
       personal: {
         name: "Jonathan Gray",
-        title: "Systems Development Engineer",
+        title: "Systems Development Engineer at Route 53 AWS",
         tagline: "Site Reliability Engineer | DevOps | Cloud Infrastructure",
         email: "jonathan.gray311@gmail.com",
         location: "London, UK",
         linkedin: "linkedin.com/in/jonathan-gray-071290ab"
       },
-      profile: "Site Reliability Engineer with extensive experience operating highly available, globally distributed systems in production, currently working on Route 53 Health Checks. Strong background in Linux systems, infrastructure monitoring, and incident response. Passionate about enabling operational efficiency and enhancing service reliability through scalable solutions.",
+      profile: "Site Reliability Engineer with extensive experience operating and enhancing highly available, global services in large production environments. Currently working at AWS in a team that owns a globally distributed highly available endpoint monitoring service. Strong background across Linux systems, cloud infrastructure, service reliability, and platform tooling. Experienced in incident response, automation, CI/CD workflows, deep-dive troubleshooting and implementing scalable infrastructure and new services at scale.",
       experience: [
         {
           company: "Amazon Web Services (AWS)",
           role: "Systems Development Engineer",
           team: "Route53 Health Checks",
-          period: "Feb 2024 - Present",
-          location: "London (Remote)",
-          achievements: [
-            "24/7 on-call rotation for critical production service",
-            "Database migration across multiple regions",
-            "Improved region build and deployment workflows",
-            "Authored COE documents for major incidents",
-            "Build tooling in Python, Bash, and Ruby"
-          ],
-          technologies: ["Python", "Ruby", "Bash", "AWS CloudFormation", "EC2", "IAM", "CloudWatch"]
-        },
-        {
-          company: "Amazon Web Services (AWS)",
-          role: "Systems Engineer",
-          team: "Route53 Health Checks",
-          period: "Aug 2021 - Feb 2024",
+          period: "2021 - Present",
           location: "London",
           achievements: [
-            "Deep-dive troubleshooting on-call",
-            "Built regions with automation",
-            "Security patching campaigns"
+            "24/7 on-call rotation for critical production service, leading incident response and root cause investigations",
+            "Expanded Route 53 Health Check service to 7 new Commercial regions via region builds",
+            "Wrote detailed region build runbook, automated manual tasks using in-house automation framework and IaC (CloudFormation)",
+            "Completed database migration from legacy in-house technology to modern solution across multiple regions",
+            "Investigated configuration drift, deployment edge cases and testing gaps; wrote unit tests, sanity tests and pipeline changes",
+            "Delivered security findings projects rolled out across multiple regions and availability zones",
+            "Authored and revamped operational runbooks to improve on-call response and reduce time to resolution",
+            "Built tooling in Python, Bash, and Ruby for deployment automation, validation, and CI/CD workflows",
+            "Service code changes in Java to address bugs and enable compatibility for migrations and region builds"
           ],
-          technologies: ["AWS", "Linux (RHEL)", "Python", "Bash", "CloudFormation", "Internal Tooling"]
+          technologies: ["Python", "Ruby", "Bash", "Java", "AWS CloudFormation", "EC2", "IAM", "CloudWatch"]
         },
         {
           company: "Mimecast",
           role: "Site Reliability Engineer",
-          period: "Mar 2019 - Jul 2021",
+          period: "2019 - 2021",
           location: "London",
           achievements: [
-            "Multi-region production infrastructure",
-            "Implemented Project Turbo (K8s, PostgreSQL, Kafka)",
-            "24/7 on-call rotation"
+            "Supported and operated multi-region production infrastructure hosting core email security services",
+            "On-call rotation responding to incidents and service degradation",
+            "Lead efforts to implement Project Turbo: a Java-based service automating end-user reporting of malicious emails, built on Kubernetes with Kafka and Postgres",
+            "Collaborated with engineering and product teams to improve reliability, scalability, and operational visibility",
+            "Drove reliability improvements through automation, monitoring, and systematic troubleshooting"
           ],
           technologies: ["Kubernetes", "Docker", "PostgreSQL", "Kafka", "Java", "Prometheus", "Grafana", "Puppet"]
         },
         {
           company: "FICO",
           role: "DevOps Engineer",
-          period: "Apr 2018 - Feb 2019",
-          location: "Reading",
+          period: "2018 - 2019",
+          location: "London",
           achievements: [
-            "Maintained infrastructure for fraud detection systems",
-            "Automated Linux-based infrastructure",
-            "Supported virtualised environments using Xen VMs"
+            "Supported and automated Linux-based infrastructure and virtualised environments of over 3000 servers",
+            "Assisted engineering teams with production support and deployment workflows"
           ],
           technologies: ["Linux", "Xen", "Bash", "Python", "Nagios", "Jenkins", "SaltStack"]
-        },
-        {
-          company: "Forcepoint",
-          role: "Associate Technical Support Engineer",
-          period: "Mar 2017 - Apr 2018",
-          location: "Reading",
-          achievements: [
-            "Technical support via phone, email and tickets",
-            "Troubleshot complex issues and identified bugs",
-            "Liaised with Dev teams via JIRA for fixes"
-          ],
-          technologies: ["RHEL/CentOS", "MSSQL", "VMware vSphere", "SMTP", "DNS", "Postfix", "TLS", "Wireshark", "Windows Server"]
-        },
-        {
-          company: "Ultima Business Solutions",
-          role: "Technical Support Engineer",
-          period: "Mar 2016 - Mar 2017",
-          location: "Reading",
-          achievements: [
-            "1st & 2nd line technical troubleshooting",
-            "Network troubleshooting (TCP/IP, DNS, DHCP)"
-          ],
-          technologies: ["Windows Server", "Active Directory", "Microsoft Exchange", "TCP/IP", "DNS", "DHCP", "Citrix"]
-        },
-        {
-          company: "British Car Auctions",
-          role: "IT Support Analyst",
-          period: "Dec 2015 - Mar 2016",
-          location: "Farnham",
-          achievements: [
-            "IT Support to end users via phone and remote assistance"
-          ],
-          technologies: ["Windows", "Remote Desktop", "Active Directory"]
-        },
-        {
-          company: "Phoenix IT Group",
-          role: "IT Staging Engineer",
-          period: "Jan 2015 - Jul 2015",
-          location: "Farnborough",
-          technologies: ["Hardware Staging", "Windows", "Imaging"]
         }
       ],
+      earlierRoles: "Associate Technical Support Engineer (Forcepoint), Technical Support Engineer (Ultima Business Solutions), IT Support Analyst (British Car Auctions), IT Staging Engineer (Phoenix IT Group)",
       skills: {
         "Containerisation": ["Kubernetes", "Docker"],
         "Cloud": ["AWS (EC2, IAM, S3, CloudFormation)", "Linux (RHEL, CentOS)"],
@@ -727,6 +680,7 @@ ${CV_DATA.profile}
           }
           output += '\n';
         });
+        output += `<span class="muted">Earlier Roles:</span> ${CV_DATA.earlierRoles}\n`;
         return output;
       },
 
@@ -754,7 +708,8 @@ ${CV_DATA.profile}
 
   <span class="success">●</span> Available for roles from <span class="highlight">February 2026</span>
 
-<span class="muted">Open to SRE, DevOps, and Cloud Infrastructure positions.</span>
+<span class="muted">Looking for mid-level to senior level roles as a Linux Systems Engineer,
+Site Reliability Engineer, DevOps Engineer or Platform Engineer.</span>
 `,
 
       socials: () => `
@@ -837,7 +792,7 @@ ${CV_DATA.profile}
 |__/                   |___/           |___/
 </span>
 <span class="highlight">Jonathan Gray</span>
-<span class="muted">Systems Development Engineer @ AWS</span>
+<span class="muted">Systems Development Engineer at Route 53 AWS</span>
 
 Type <span class="success">help</span> to see available commands.
 `;
