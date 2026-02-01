@@ -1,0 +1,7 @@
+*.md
+portfolio-content.md
+portfolio-data.json
+linkedin-profile-data*
+.git
+.github
+README.md

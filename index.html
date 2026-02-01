@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Jonathan Gray | Terminal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-color: #0d1117;
+      --terminal-bg: #161b22;
+      --input-bg: #21262d;
+      --text-color: #c9d1d9;
+      --prompt-color: #58a6ff;
+      --accent-color: #ff9900;
+      --success-color: #3fb950;
+      --error-color: #f85149;
+      --muted-color: #8b949e;
+      --border-color: #30363d;
+    }
+
+    /* Theme: GitHub Dark (default) */
+    [data-theme="github"] {
+      --bg-color: #0d1117;
+      --terminal-bg: #161b22;
+      --input-bg: #21262d;
+      --text-color: #c9d1d9;
+      --prompt-color: #58a6ff;
+      --accent-color: #ff9900;
+      --success-color: #3fb950;
+      --error-color: #f85149;
+      --muted-color: #8b949e;
+      --border-color: #30363d;
+    }
+
+    /* Theme: Retro Green */
+    [data-theme="retro"] {
+      --bg-color: #0a0a0a;
+      --terminal-bg: #0f0f0f;
+      --input-bg: #1a1a1a;
+      --text-color: #33ff33;
+      --prompt-color: #00ff00;
+      --accent-color: #00ff88;
+      --success-color: #33ff33;
+      --error-color: #ff3333;
+      --muted-color: #22aa22;
+      --border-color: #1a3a1a;
+    }
+
+    /* Theme: Dracula */
+    [data-theme="dracula"] {
+      --bg-color: #282a36;
+      --terminal-bg: #1e1f29;
+      --input-bg: #343746;
+      --text-color: #f8f8f2;
+      --prompt-color: #bd93f9;
+      --accent-color: #ff79c6;
+      --success-color: #50fa7b;
+      --error-color: #ff5555;
+      --muted-color: #6272a4;
+      --border-color: #44475a;
+    }
+
+    /* Theme: Solarized */
+    [data-theme="solarized"] {
+      --bg-color: #002b36;
+      --terminal-bg: #073642;
+      --input-bg: #094352;
+      --text-color: #839496;
+      --prompt-color: #268bd2;
+      --accent-color: #b58900;
+      --success-color: #859900;
+      --error-color: #dc322f;
+      --muted-color: #586e75;
+      --border-color: #0a4a5c;
+    }
+
+    /* Theme: AWS */
+    [data-theme="aws"] {
+      --bg-color: #1a1a2e;
+      --terminal-bg: #232f3e;
+      --input-bg: #2d3a4a;
+      --text-color: #ffffff;
+      --prompt-color: #ff9900;
+      --accent-color: #ff9900;
+      --success-color: #7dce94;
+      --error-color: #ff6b6b;
+      --muted-color: #a0aec0;
+      --border-color: #3d4f5f;
+    }
+
+    /* Theme: Cyberpunk */
+    [data-theme="cyberpunk"] {
+      --bg-color: #0a0014;
+      --terminal-bg: #120020;
+      --input-bg: #1a0030;
+      --text-color: #00ffff;
+      --prompt-color: #ff00ff;
+      --accent-color: #ffff00;
+      --success-color: #00ff00;
+      --error-color: #ff0040;
+      --muted-color: #8080ff;
+      --border-color: #3a0060;
+    }
+
+    /* Theme: Minimal (black/white/grey) */
+    [data-theme="minimal"] {
+      --bg-color: #111111;
+      --terminal-bg: #1a1a1a;
+      --input-bg: #252525;
+      --text-color: #e0e0e0;
+      --prompt-color: #ffffff;
+      --accent-color: #ffffff;
+      --success-color: #a0a0a0;
+      --error-color: #ff6666;
+      --muted-color: #707070;
+      --border-color: #333333;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* Loading Screen */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loading-ascii {
+      color: var(--accent-color);
+      font-size: 12px;
+      line-height: 1.2;
+      text-align: center;
+      white-space: pre;
+    }
+
+    .loading-text {
+      color: var(--text-color);
+      margin-top: 24px;
+      font-size: 14px;
+    }
+
+    .loading-bar {
+      width: 280px;
+      height: 4px;
+      background: var(--border-color);
+      margin-top: 16px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .loading-bar-fill {
+      height: 100%;
+      background: var(--accent-color);
+      width: 0%;
+      transition: width 0.15s ease;
+      border-radius: 2px;
+    }
+
+    .loading-status {
+      color: var(--muted-color);
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    /* Main Container */
+    .main-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      padding-bottom: 60px;
+    }
+
+    .terminal {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--terminal-bg);
+      border-radius: 8px 8px 0 0;
+      border: 1px solid var(--border-color);
+      border-bottom: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .window-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #f85149; }
+    .dot-yellow { background: #d29922; }
+    .dot-green { background: #3fb950; }
+
+    .terminal-title {
+      flex: 1;
+      text-align: center;
+      color: var(--muted-color);
+      font-size: 12px;
+    }
+
+    .theme-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .theme-btn {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .theme-btn.active {
+      border-color: #fff;
+    }
+
+    .theme-btn[data-theme="github"] { background: linear-gradient(135deg, #0d1117, #58a6ff); }
+    .theme-btn[data-theme="retro"] { background: linear-gradient(135deg, #0a0a0a, #33ff33); }
+    .theme-btn[data-theme="dracula"] { background: linear-gradient(135deg, #282a36, #bd93f9); }
+    .theme-btn[data-theme="solarized"] { background: linear-gradient(135deg, #002b36, #268bd2); }
+    .theme-btn[data-theme="aws"] { background: linear-gradient(135deg, #232f3e, #ff9900); }
+    .theme-btn[data-theme="cyberpunk"] { background: linear-gradient(135deg, #0a0014, #ff00ff); }
+    .theme-btn[data-theme="minimal"] { background: linear-gradient(135deg, #111111, #ffffff); }
+
+    .terminal-body {
+      background: var(--terminal-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 0 0 8px 8px;
+      padding: 20px;
+      min-height: 60vh;
+      max-height: 70vh;
+      overflow-y: auto;
+      transition: background-color 0.3s ease;
+    }
+
+    .output {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .prompt-line {
+      display: flex;
+      align-items: flex-start;
+      margin-top: 8px;
+      background: var(--input-bg);
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .prompt {
+      color: var(--prompt-color);
+      margin-right: 8px;
+      user-select: none;
+    }
+
+    .command-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      font-family: inherit;
+      font-size: 16px; /* Prevents zoom on iOS */
+      outline: none;
+      caret-color: var(--accent-color);
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+
+    .ascii-art {
+      color: var(--accent-color);
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    .highlight { color: var(--accent-color); }
+    .success { color: var(--success-color); }
+    .error { color: var(--error-color); }
+    .muted { color: var(--muted-color); }
+    .blue { color: var(--prompt-color); }
+
+    .section-title {
+      color: var(--accent-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+    }
+
+    .job-header { color: var(--success-color); }
+    .job-meta { color: var(--muted-color); font-style: italic; }
+    .skill-category { color: var(--prompt-color); }
+
+    /* Sticky Footer */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--terminal-bg);
+      border-top: 1px solid var(--border-color);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      z-index: 100;
+      transition: background-color 0.3s ease;
+    }
+
+    .footer-section {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer-link {
+      color: var(--muted-color);
+      text-decoration: none;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-link:hover {
+      color: var(--accent-color);
+    }
+
+    .footer-contact {
+      color: var(--muted-color);
+    }
+
+    .footer-divider {
+      color: var(--border-color);
+    }
+
+    @media (max-width: 768px) {
+      body { font-size: 13px; }
+      .main-container {
+        padding: 12px;
+        padding-bottom: 100px;
+        align-items: flex-start;
+        padding-top: 12px;
+      }
+      .terminal-header {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .terminal-title {
+        order: 3;
+        width: 100%;
+        text-align: left;
+        margin-top: 4px;
+      }
+      .theme-buttons {
+        order: 2;
+        margin-left: auto;
+      }
+      .window-buttons {
+        order: 1;
+      }
+      .terminal-body {
+        min-height: 50vh;
+        max-height: 60vh;
+        padding: 12px;
+      }
+      .loading-ascii { font-size: 8px; }
+      .loading-bar { width: 200px; }
+      .footer {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 16px;
+      }
+      .footer-section {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        font-size: 11px;
+      }
+      .prompt-line {
+        padding: 6px 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body { font-size: 12px; }
+      .main-container {
+        padding: 8px;
+        padding-bottom: 110px;
+      }
+      .terminal-body {
+        padding: 10px;
+        min-height: 45vh;
+        max-height: 55vh;
+      }
+      .theme-btn {
+        width: 18px;
+        height: 18px;
+      }
+      .terminal-dot {
+        width: 10px;
+        height: 10px;
+      }
+      .footer-section {
+        gap: 6px;
+        font-size: 10px;
+      }
+      .footer-divider {
+        display: none;
+      }
+      .footer-section {
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body data-theme="cyberpunk">
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <pre class="loading-ascii" id="loadingAscii"></pre>
+    <div class="loading-text" id="loadingText">Loading...</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill" id="loadingBarFill"></div>
+    </div>
+    <div class="loading-status" id="loadingStatus"></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <div class="terminal">
+      <div class="terminal-header">
+        <div class="window-buttons">
+          <div class="terminal-dot dot-red"></div>
+          <div class="terminal-dot dot-yellow"></div>
+          <div class="terminal-dot dot-green"></div>
+        </div>
+        <div class="terminal-title">jonathan@portfolio ~ </div>
+        <div class="theme-buttons">
+          <button class="theme-btn" data-theme="github" title="GitHub Dark"></button>
+          <button class="theme-btn" data-theme="retro" title="Retro Green"></button>
+          <button class="theme-btn" data-theme="dracula" title="Dracula"></button>
+          <button class="theme-btn" data-theme="solarized" title="Solarized"></button>
+          <button class="theme-btn" data-theme="aws" title="AWS"></button>
+          <button class="theme-btn active" data-theme="cyberpunk" title="Cyberpunk"></button>
+          <button class="theme-btn" data-theme="minimal" title="Minimal"></button>
+        </div>
+      </div>
+      <div class="terminal-body" id="terminal">
+        <div class="output" id="output"></div>
+        <div class="prompt-line">
+          <span class="prompt">visitor@jonathan.dev:~$</span>
+          <input type="text" class="command-input" id="commandInput" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Footer -->
+  <footer class="footer">
+    <div class="footer-section">
+      <a href="mailto:jonathan.gray311@gmail.com" class="footer-link">jonathan.gray311@gmail.com</a>
+      <span class="footer-divider">|</span>
+      <a href="https://linkedin.com/in/jonathan-gray-071290ab" target="_blank" class="footer-link">LinkedIn</a>
+      <span class="footer-divider">|</span>
+      <a href="https://github.com" target="_blank" class="footer-link">GitHub</a>
+    </div>
+    <div class="footer-section">
+      <span class="footer-contact">London, UK</span>
+      <span class="footer-divider">|</span>
+      <span class="footer-contact">Type <span style="color: var(--accent-color)">help</span> for commands</span>
+    </div>
+  </footer>
+
+  <script>
+    // Loading ASCII art
+    const LOADING_ASCII = `
+     ___  ___  ___
+    |   ||   ||   |
+    | J || G ||   |
+    |___||___||___|
+    `;
+
+    const LOAD_STEPS = [
+      "Loading profile...",
+      "Initializing terminal...",
+      "Ready"
+    ];
+
+    // Loading animation
+    async function runBootSequence() {
+      const loadingAscii = document.getElementById('loadingAscii');
+      const loadingText = document.getElementById('loadingText');
+      const loadingBarFill = document.getElementById('loadingBarFill');
+      const loadingStatus = document.getElementById('loadingStatus');
+      const loadingScreen = document.getElementById('loadingScreen');
+
+      loadingAscii.textContent = LOADING_ASCII;
+
+      for (let i = 0; i < LOAD_STEPS.length; i++) {
+        loadingStatus.textContent = LOAD_STEPS[i];
+        const progress = ((i + 1) / LOAD_STEPS.length) * 100;
+        loadingBarFill.style.width = progress + '%';
+        await new Promise(resolve => setTimeout(resolve, 400));
+      }
+
+      loadingText.textContent = "Welcome";
+      await new Promise(resolve => setTimeout(resolve, 300));
+      loadingScreen.classList.add('hidden');
+
+      document.getElementById('commandInput').focus();
+    }
+
+    // CV Data
+    const CV_DATA = {
+      personal: {
+        name: "Jonathan Gray",
+        title: "Systems Development Engineer",
+        tagline: "Site Reliability Engineer | DevOps | Cloud Infrastructure",
+        email: "jonathan.gray311@gmail.com",
+        location: "London, UK",
+        linkedin: "linkedin.com/in/jonathan-gray-071290ab"
+      },
+      profile: "Site Reliability Engineer with extensive experience operating highly available, globally distributed systems in production, currently working on Route 53 Health Checks. Strong background in Linux systems, infrastructure monitoring, and incident response. Passionate about enabling operational efficiency and enhancing service reliability through scalable solutions.",
+      experience: [
+        {
+          company: "Amazon Web Services (AWS)",
+          role: "Systems Development Engineer",
+          team: "Route53 Health Checks",
+          period: "Feb 2024 - Present",
+          location: "London (Remote)",
+          achievements: [
+            "24/7 on-call rotation for critical production service",
+            "Database migration across multiple regions",
+            "Improved region build and deployment workflows",
+            "Authored COE documents for major incidents",
+            "Build tooling in Python, Bash, and Ruby"
+          ],
+          technologies: ["Python", "Ruby", "Bash", "AWS CloudFormation", "EC2", "IAM", "CloudWatch"]
+        },
+        {
+          company: "Amazon Web Services (AWS)",
+          role: "Systems Engineer",
+          team: "Route53 Health Checks",
+          period: "Aug 2021 - Feb 2024",
+          location: "London",
+          achievements: [
+            "Deep-dive troubleshooting on-call",
+            "Built regions with automation",
+            "Security patching campaigns"
+          ],
+          technologies: ["AWS", "Linux (RHEL)", "Python", "Bash", "CloudFormation", "Internal Tooling"]
+        },
+        {
+          company: "Mimecast",
+          role: "Site Reliability Engineer",
+          period: "Mar 2019 - Jul 2021",
+          location: "London",
+          achievements: [
+            "Multi-region production infrastructure",
+            "Implemented Project Turbo (K8s, PostgreSQL, Kafka)",
+            "24/7 on-call rotation"
+          ],
+          technologies: ["Kubernetes", "Docker", "PostgreSQL", "Kafka", "Java", "Prometheus", "Grafana", "Puppet"]
+        },
+        {
+          company: "FICO",
+          role: "DevOps Engineer",
+          period: "Apr 2018 - Feb 2019",
+          location: "Reading",
+          achievements: [
+            "Maintained infrastructure for fraud detection systems",
+            "Automated Linux-based infrastructure",
+            "Supported virtualised environments using Xen VMs"
+          ],
+          technologies: ["Linux", "Xen", "Bash", "Python", "Nagios", "Jenkins", "SaltStack"]
+        },
+        {
+          company: "Forcepoint",
+          role: "Associate Technical Support Engineer",
+          period: "Mar 2017 - Apr 2018",
+          location: "Reading",
+          achievements: [
+            "Technical support via phone, email and tickets",
+            "Troubleshot complex issues and identified bugs",
+            "Liaised with Dev teams via JIRA for fixes"
+          ],
+          technologies: ["RHEL/CentOS", "MSSQL", "VMware vSphere", "SMTP", "DNS", "Postfix", "TLS", "Wireshark", "Windows Server"]
+        },
+        {
+          company: "Ultima Business Solutions",
+          role: "Technical Support Engineer",
+          period: "Mar 2016 - Mar 2017",
+          location: "Reading",
+          achievements: [
+            "1st & 2nd line technical troubleshooting",
+            "Network troubleshooting (TCP/IP, DNS, DHCP)"
+          ],
+          technologies: ["Windows Server", "Active Directory", "Microsoft Exchange", "TCP/IP", "DNS", "DHCP", "Citrix"]
+        },
+        {
+          company: "British Car Auctions",
+          role: "IT Support Analyst",
+          period: "Dec 2015 - Mar 2016",
+          location: "Farnham",
+          achievements: [
+            "IT Support to end users via phone and remote assistance"
+          ],
+          technologies: ["Windows", "Remote Desktop", "Active Directory"]
+        },
+        {
+          company: "Phoenix IT Group",
+          role: "IT Staging Engineer",
+          period: "Jan 2015 - Jul 2015",
+          location: "Farnborough",
+          technologies: ["Hardware Staging", "Windows", "Imaging"]
+        }
+      ],
+      skills: {
+        "Containerisation": ["Kubernetes", "Docker"],
+        "Cloud": ["AWS (EC2, IAM, S3, CloudFormation)", "Linux (RHEL, CentOS)"],
+        "Coding": ["Python", "Bash", "Ruby", "Java"],
+        "DevOps": ["Git", "CI/CD", "Jenkins", "IaC"],
+        "Databases": ["MySQL", "PostgreSQL", "MongoDB"],
+        "Monitoring": ["CloudWatch", "Prometheus", "Grafana", "Nagios"]
+      }
+    };
+
+    // Commands
+    const COMMANDS = {
+      help: () => `
+<span class="section-title">Available Commands</span>
+
+  <span class="highlight">about</span>      - Learn about me
+  <span class="highlight">experience</span> - View my work history
+  <span class="highlight">skills</span>     - See my technical skills
+  <span class="highlight">status</span>     - Current availability in the job market
+  <span class="highlight">cv</span>         - Download my CV
+  <span class="highlight">contact</span>    - Get my contact info
+  <span class="highlight">socials</span>    - Show social links
+  <span class="highlight">themes</span>     - List available themes
+  <span class="highlight">theme [n]</span>  - Switch theme (e.g., theme retro)
+  <span class="highlight">neofetch</span>   - Display system info
+  <span class="highlight">clear</span>      - Clear the terminal
+  <span class="highlight">help</span>       - Show this help message
+
+<span class="muted">Tip: Use Tab for autocomplete, Arrow keys for history</span>
+`,
+
+      about: () => `
+<span class="section-title">About Me</span>
+
+<span class="highlight">${CV_DATA.personal.name}</span>
+<span class="blue">${CV_DATA.personal.title}</span>
+<span class="muted">${CV_DATA.personal.tagline}</span>
+
+${CV_DATA.profile}
+`,
+
+      experience: () => {
+        let output = `\n<span class="section-title">Work Experience</span>\n\n`;
+        CV_DATA.experience.forEach((job) => {
+          output += `<span class="job-header">${job.role}</span> @ ${job.company}`;
+          if (job.team) output += ` (${job.team})`;
+          output += `\n<span class="job-meta">${job.period} | ${job.location}</span>\n`;
+          if (job.achievements) {
+            job.achievements.forEach(a => {
+              output += `  <span class="muted">▸</span> ${a}\n`;
+            });
+          }
+          if (job.technologies) {
+            output += `  <span class="blue">Tech:</span> ${job.technologies.join(', ')}\n`;
+          }
+          output += '\n';
+        });
+        return output;
+      },
+
+      skills: () => {
+        let output = `\n<span class="section-title">Technical Skills</span>\n\n`;
+        for (const [category, skills] of Object.entries(CV_DATA.skills)) {
+          output += `<span class="skill-category">${category}</span>\n`;
+          output += `  ${skills.join(' • ')}\n\n`;
+        }
+        return output;
+      },
+
+      contact: () => `
+<span class="section-title">Contact</span>
+
+  <span class="highlight">Email</span>    ${CV_DATA.personal.email}
+  <span class="highlight">LinkedIn</span> ${CV_DATA.personal.linkedin}
+  <span class="highlight">Location</span> ${CV_DATA.personal.location}
+
+<span class="muted">Feel free to reach out!</span>
+`,
+
+      status: () => `
+<span class="section-title">Status</span>
+
+  <span class="success">●</span> Available for roles from <span class="highlight">February 2026</span>
+
+<span class="muted">Open to SRE, DevOps, and Cloud Infrastructure positions.</span>
+`,
+
+      socials: () => `
+<span class="section-title">Social Links</span>
+
+  <span class="highlight">Email</span>     jonathan.gray311@gmail.com
+  <span class="highlight">LinkedIn</span>  linkedin.com/in/jonathan-gray-071290ab
+  <span class="highlight">GitHub</span>    github.com/jonngray
+  <span class="highlight">Location</span>  London, UK
+`,
+
+      themes: () => `
+<span class="section-title">Available Themes</span>
+
+  <span class="highlight">github</span>    - GitHub Dark (default)
+  <span class="highlight">retro</span>     - Retro Green CRT
+  <span class="highlight">dracula</span>   - Dracula Purple
+  <span class="highlight">solarized</span> - Solarized Dark
+  <span class="highlight">aws</span>       - AWS Orange
+  <span class="highlight">cyberpunk</span> - Cyberpunk Neon
+  <span class="highlight">minimal</span>   - Black, White & Grey
+
+<span class="muted">Use 'theme [name]' to switch (e.g., theme minimal)</span>
+<span class="muted">Or click the theme buttons in the header</span>
+`,
+
+      theme: (args) => {
+        const themeName = args.trim().toLowerCase();
+        const validThemes = ['github', 'retro', 'dracula', 'solarized', 'aws', 'cyberpunk', 'minimal'];
+        if (!validThemes.includes(themeName)) {
+          return `<span class="error">Invalid theme: ${themeName}</span>\nAvailable: ${validThemes.join(', ')}`;
+        }
+        setTheme(themeName);
+        return `<span class="success">Theme changed to: ${themeName}</span>`;
+      },
+
+      cv: () => {
+        const link = document.createElement('a');
+        link.href = 'jonathan-gray-cv.pdf';
+        link.download = 'jonathan-gray-cv.pdf';
+        link.click();
+        return `<span class="success">Downloading CV...</span>`;
+      },
+
+      neofetch: () => `
+<span class="highlight">       _,met$$$$$gg.</span>          <span class="blue">jonathan</span>@<span class="blue">portfolio</span>
+<span class="highlight">    ,g$$$$$$$$$$$$$$$P.</span>       ─────────────────
+<span class="highlight">  ,g$$P"     """Y$$.". </span>       <span class="blue">OS:</span> CentOS Linux
+<span class="highlight"> ,$$P'              \`$$$.</span>      <span class="blue">Host:</span> jonngray
+<span class="highlight">,$$P       ,ggs.     \`$$b:</span>     <span class="blue">Kernel:</span> SRE-5.x
+<span class="highlight">d$$'     ,$P"'   .    $$$</span>      <span class="blue">Uptime:</span> since 2015
+<span class="highlight">$$P      d$'     ,    $$P</span>      <span class="blue">Shell:</span> zsh
+<span class="highlight">$$:      $$.   -    ,d$$'</span>      <span class="blue">CPU:</span> Coffee-Powered
+<span class="highlight">$$;      Y$b._   _,d$P'</span>       <span class="blue">Memory:</span> a few outages in my time
+<span class="highlight">Y$$.    \`.\`"Y$$$$P"'</span>          <span class="blue">Disk:</span> /var/log/incidents
+<span class="highlight">\`$$b      "-.__</span>              <span class="blue">Theme:</span> ${document.body.dataset.theme}
+<span class="highlight"> \`Y$$</span>
+<span class="highlight">  \`Y$$.</span>
+<span class="highlight">    \`$$b.</span>                      <span class="muted">SRE | DevOps | Cloud</span>
+<span class="highlight">      \`Y$$b.</span>
+<span class="highlight">         \`"Y$b._</span>
+<span class="highlight">             \`"""</span>
+`,
+
+      clear: () => {
+        document.getElementById('output').innerHTML = '';
+        return '';
+      }
+    };
+
+    function getWelcomeMessage() {
+      return `
+<span class="ascii-art">   _
+  (_)
+   _  ___  _ __  _ __   __ _ _ __ __ _ _   _
+  | |/ _ \\| '_ \\| '_ \\ / _\` | '__/ _\` | | | |
+  | | (_) | | | | | | | (_| | | | (_| | |_| |
+  | |\\___/|_| |_|_| |_|\\__, |_|  \\__,_|\\__, |
+ _/ |                   __/ |           __/ |
+|__/                   |___/           |___/
+</span>
+<span class="highlight">Jonathan Gray</span>
+<span class="muted">Systems Development Engineer @ AWS</span>
+
+Type <span class="success">help</span> to see available commands.
+`;
+    }
+
+    // Theme management
+    function setTheme(themeName) {
+      document.body.dataset.theme = themeName;
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === themeName);
+      });
+      localStorage.setItem('portfolio-theme', themeName);
+    }
+
+    // Terminal state
+    let commandHistory = [];
+    let historyIndex = -1;
+    const outputEl = document.getElementById('output');
+    const inputEl = document.getElementById('commandInput');
+    const terminalBody = document.getElementById('terminal');
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load saved theme
+      const savedTheme = localStorage.getItem('portfolio-theme');
+      if (savedTheme) setTheme(savedTheme);
+
+      // Theme button handlers
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => setTheme(btn.dataset.theme));
+      });
+
+      // Run boot sequence
+      runBootSequence().then(() => {
+        outputEl.innerHTML = getWelcomeMessage();
+      });
+    });
+
+    // Command execution
+    function executeCommand(cmd) {
+      const trimmedCmd = cmd.trim().toLowerCase();
+      const [command, ...args] = trimmedCmd.split(' ');
+      const argsStr = args.join(' ');
+
+      if (trimmedCmd) {
+        commandHistory.push(trimmedCmd);
+        historyIndex = commandHistory.length;
+      }
+
+      outputEl.innerHTML += `\n<span class="prompt">visitor@jonathan.dev:~$</span> ${cmd}\n`;
+
+      if (trimmedCmd === '') {
+        // Empty
+      } else if (command === 'theme') {
+        outputEl.innerHTML += COMMANDS.theme(argsStr);
+      } else if (COMMANDS[command]) {
+        const result = COMMANDS[command]();
+        if (result) outputEl.innerHTML += result;
+      } else {
+        outputEl.innerHTML += `<span class="error">Command not found: ${cmd}</span>\nType <span class="success">help</span> to see available commands.\n`;
+      }
+
+      terminalBody.scrollTop = terminalBody.scrollHeight;
+    }
+
+    // Input handling
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        executeCommand(inputEl.value);
+        inputEl.value = '';
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (historyIndex > 0) {
+          historyIndex--;
+          inputEl.value = commandHistory[historyIndex];
+        }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (historyIndex < commandHistory.length - 1) {
+          historyIndex++;
+          inputEl.value = commandHistory[historyIndex];
+        } else {
+          historyIndex = commandHistory.length;
+          inputEl.value = '';
+        }
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        const partial = inputEl.value.toLowerCase().split(' ')[0];
+        const allCommands = Object.keys(COMMANDS);
+        const matches = allCommands.filter(c => c.startsWith(partial));
+        if (matches.length === 1) {
+          inputEl.value = matches[0] + (matches[0] === 'theme' ? ' ' : '');
+        } else if (matches.length > 1 && partial) {
+          outputEl.innerHTML += `\n<span class="muted">Suggestions: ${matches.join(', ')}</span>\n`;
+          terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+      } else if (e.key === 'l' && e.ctrlKey) {
+        e.preventDefault();
+        COMMANDS.clear();
+      }
+    });
+
+    // Focus management
+    terminalBody.addEventListener('click', () => inputEl.focus());
+    document.addEventListener('keydown', (e) => {
+      if (!e.ctrlKey && !e.metaKey && !e.altKey) inputEl.focus();
+    });
+  </script>
+</body>
+</html>

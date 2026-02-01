@@ -1,0 +1,199 @@
+{
+  "source": "LinkedIn Profile Export",
+  "lastUpdated": "2026-02-01",
+  "purpose": "Enhanced experience data for portfolio website",
+  
+  "personal": {
+    "name": "Jonathan Gray",
+    "headline": "DevOps / SRE in London . Systems Development Engineer at AWS",
+    "location": "London, England, United Kingdom",
+    "email": "jonathan.gray311@gmail.com",
+    "linkedin": "www.linkedin.com/in/jonathangray-071290ab"
+  },
+  
+  "topSkills": ["Java", "AWS CloudFormation", "Scripting"],
+  
+  "summary": "With up to four years at AWS, 6 years experience as an SRE and previously a DevOps Engineer and 10 years experience total in the IT sector I have honed my expertise in Linux systems, infrastructure monitoring, and incident response. My passion is to enable operational efficiency and enhance service reliability by implementing scalable solutions. I am motivated by opportunities to collaborate on high-impact projects and constantly learn and improve on my skillset in this fast and ever changing world.",
+  
+  "experience": [
+    {
+      "company": "Amazon Web Services (AWS)",
+      "companyLogo": "aws",
+      "totalTenure": "4 years 6 months",
+      "roles": [
+        {
+          "title": "Systems Development Engineer",
+          "team": "Route53 HealthChecks",
+          "period": "February 2024 - Present",
+          "duration": "2 years",
+          "location": "City of London, England, United Kingdom",
+          "description": "",
+          "highlights": []
+        },
+        {
+          "title": "Linux Systems Engineer",
+          "team": "Route53 Healthcheck",
+          "period": "August 2021 - February 2024",
+          "duration": "2 years 7 months",
+          "location": "City of London, England, United Kingdom",
+          "description": "Systems Engineer within the Route53 Healthcheck team. The Route53 Healthcheck service is a highly available endpoint monitoring global service with 100% uptime.",
+          "highlights": [
+            "Oncall roster - responded to alerts, triaged events and troubleshooting/deep diving into issues",
+            "Improvements and high severity issue reduction",
+            "Region Builds - Building regions using existing AWS and in-house tooling while working on Automation tasks to reduce human intervention and drive overall build time down",
+            "Top-down security campaigns - these required code changes/patches and following through deployments to all Healthcheck services in multiple regions/AZs"
+          ]
+        }
+      ]
+    },
+    {
+      "company": "Mimecast",
+      "companyLogo": "mimecast",
+      "totalTenure": "2 years 5 months",
+      "roles": [
+        {
+          "title": "Site Reliability Engineer",
+          "team": "TechOps",
+          "period": "March 2019 - July 2021",
+          "duration": "2 years 5 months",
+          "location": "London, United Kingdom",
+          "description": "Part of the TechOps team, working in a multi-DC redundant multi-region infrastructure with thousands of servers globally. Daily tasks are a mix between fire fighting, dealing with monitoring alerts, escalations from other teams and project based work. Also partake in the OnCall roster which responds to late night alerts, needed to ensure 24/7 uptime of core services and applications.",
+          "highlights": [
+            "Multi-DC redundant multi-region infrastructure",
+            "Thousands of servers globally",
+            "24/7 uptime of core services and applications",
+            "OnCall roster for incident response"
+          ],
+          "technologies": ["CentOS", "Red Hat Linux", "SVN", "Puppet", "Git", "Ruby", "nginx", "PostgreSQL", "MySQL", "Bash scripting", "Nagios", "Docker", "Redis", "Kubernetes"]
+        }
+      ]
+    },
+    {
+      "company": "FICO",
+      "companyLogo": "fico",
+      "totalTenure": "11 months",
+      "roles": [
+        {
+          "title": "DevOps Engineer",
+          "team": "CCS UK Operations",
+          "period": "April 2018 - February 2019",
+          "duration": "11 months",
+          "location": "Reading, United Kingdom",
+          "description": "Working with the FICO CCS UK Operations team to maintain, automate and further improve its vast infrastructure, which is responsible for informing customers of banks about potential fraudulent behaviour.",
+          "highlights": [
+            "Infrastructure automation and improvement",
+            "Fraud detection systems support"
+          ],
+          "technologies": ["Xen VMs", "AWS basics", "Red Hat Linux", "CentOS Linux", "Python scripting", "Bash scripting", "Docker", "SaltStack", "Git", "JIRA", "Bitbucket"]
+        }
+      ]
+    },
+    {
+      "company": "Forcepoint",
+      "companyLogo": "forcepoint",
+      "totalTenure": "1 year 2 months",
+      "roles": [
+        {
+          "title": "Associate Technical Support Engineer",
+          "team": "",
+          "period": "March 2017 - April 2018",
+          "duration": "1 year 2 months",
+          "location": "Reading, United Kingdom",
+          "description": "Communicating with customers via phone calls, emails and support tickets. Troubleshooting complex issues. Sometimes identifying bugs, replicating them and liaising with Dev via JIRA to find workarounds or get a code fix in place.",
+          "highlights": [
+            "Customer communication via phone, email, and tickets",
+            "Complex issue troubleshooting",
+            "Bug identification and replication",
+            "Developer liaison for workarounds and fixes"
+          ],
+          "technologies": ["Red Hat/CentOS Linux", "SQL (MSSQL)", "VMware vSphere Client", "ESXI servers", "SMTP", "DNS", "mail routing", "postfix", "TLS", "Wireshark", "Windows Server"]
+        }
+      ]
+    },
+    {
+      "company": "Ultima Business Solutions",
+      "companyLogo": "",
+      "totalTenure": "1 year 1 month",
+      "roles": [
+        {
+          "title": "Technical Support Engineer",
+          "team": "",
+          "period": "March 2016 - March 2017",
+          "duration": "1 year 1 month",
+          "location": "Reading, United Kingdom",
+          "description": "Technical troubleshooting for end users, 1st & 2nd line issues.",
+          "highlights": [
+            "1st and 2nd line technical support",
+            "End user troubleshooting"
+          ],
+          "technologies": ["Windows Server", "Active Directory", "Microsoft Exchange", "TCP/IP", "DNS", "DHCP", "Layer 2 & 3 networking", "Citrix"]
+        }
+      ]
+    },
+    {
+      "company": "British Car Auctions Limited",
+      "companyLogo": "",
+      "totalTenure": "4 months",
+      "roles": [
+        {
+          "title": "IT Support Analyst",
+          "team": "",
+          "period": "December 2015 - March 2016",
+          "duration": "4 months",
+          "location": "Farnham",
+          "description": "Temporary 3 month contract giving IT Support to end users over the phone and remote assistance.",
+          "highlights": [
+            "Phone and remote IT support",
+            "End user assistance"
+          ],
+          "technologies": []
+        }
+      ]
+    },
+    {
+      "company": "Phoenix IT Group (now part of Daisy Group)",
+      "companyLogo": "",
+      "totalTenure": "7 months",
+      "roles": [
+        {
+          "title": "IT Staging Engineer",
+          "team": "",
+          "period": "January 2015 - July 2015",
+          "duration": "7 months",
+          "location": "Farnborough",
+          "description": "",
+          "highlights": [],
+          "technologies": []
+        }
+      ]
+    }
+  ],
+  
+  "education": [
+    {
+      "institution": "University of Surrey",
+      "degree": "Chemistry",
+      "period": "2011 - 2013"
+    }
+  ],
+  
+  "careerStats": {
+    "totalYearsInIT": 10,
+    "yearsAsSRE": 6,
+    "yearsAtAWS": 4,
+    "companies": 7,
+    "currentRole": "Systems Development Engineer at AWS"
+  },
+  
+  "websiteIntegration": {
+    "suggestedTimelineFormat": "grouped-by-company",
+    "note": "AWS has multiple roles - consider showing as a single company entry with role progression",
+    "enhancementSuggestions": [
+      "Add company logos for visual appeal",
+      "Show career progression timeline",
+      "Highlight key achievements with metrics where available",
+      "Group technologies by category for skills visualization",
+      "Consider adding '100% uptime' as a key metric for AWS section"
+    ]
+  }
+}
