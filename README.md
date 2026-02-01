@@ -118,24 +118,3 @@ git push origin main
 └─────────────────┘
 ```
 
-## Files Structure
-
-```
-jonngray-terminal/
-├── index.html              # Terminal portfolio
-├── jonathan-gray-cv.pdf    # Downloadable CV
-├── Dockerfile              # nginx:alpine + files
-├── .dockerignore           # Excludes unnecessary files
-└── .github/
-    └── workflows/
-        └── deploy.yml      # CI/CD pipeline
-```
-
-## Cost Estimate
-
-| Service | Estimated Cost |
-|---------|----------------|
-| Cloud Run | $0 (free tier) |
-| Artifact Registry | ~$0.10 |
-| Cloudflare | $0 (free plan) |
-| **Total** | **< $1/month** |
