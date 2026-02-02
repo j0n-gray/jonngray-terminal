@@ -1,7 +1,6 @@
 # jonngray-terminal
 
-A terminal-style portfolio website. In a nginx docker container, which is deployed automatically on pushed git changes through github actions to GCP CloudRun. GCP CloudRun is a serverless compute engine which runs containers. It can scale automatically to meet demand.
-
+A terminal-style portfolio website. Lives in a nginx docker container, which is deployed automatically to CloudRun on pushed git changes through github actions.
 
 ## Request Flow
 
