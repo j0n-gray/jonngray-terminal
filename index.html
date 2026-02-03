@@ -322,6 +322,7 @@
       border-radius: 0;
     }
 
+
     .ascii-art {
       color: var(--accent-color);
       font-size: 10px;
@@ -641,17 +642,18 @@
   <span class="highlight">about</span>      - Learn about me
   <span class="highlight">experience</span> - View my work history
   <span class="highlight">skills</span>     - See my technical skills
-  <span class="highlight">status</span>     - Current availability in the job market
-  <span class="highlight">cv</span>         - Download my CV
+  <span class="highlight">stack</span>      - See the infrastructure behind this site
+  <span class="highlight">status</span>     - Current availability
+  <span class="highlight">cv</span>         - View my CV
+  <span class="highlight">cv --download</span> - Download CV as PDF
   <span class="highlight">contact</span>    - Get my contact info
-  <span class="highlight">socials</span>    - Show social links
+  <span class="highlight">socials</span>    - Social links
   <span class="highlight">themes</span>     - List available themes
   <span class="highlight">theme [n]</span>  - Switch theme (e.g., theme retro)
   <span class="highlight">neofetch</span>   - Display system info
   <span class="highlight">clear</span>      - Clear the terminal
-  <span class="highlight">help</span>       - Show this help message
 
-<span class="muted">Tip: Use Tab for autocomplete, Arrow keys for history</span>
+<span class="muted">Tab for autocomplete, Arrow keys for history</span>
 `,
 
       about: () => `
@@ -693,14 +695,51 @@ ${CV_DATA.profile}
         return output;
       },
 
+      stack: () => `
+<span class="section-title">Infrastructure</span>
+
+<span class="muted">How this site is served:</span>
+<span class="muted">
+    ┌─────────────────┐
+    │   Cloudflare    │
+    └────────┬────────┘
+             ▼
+    ┌─────────────────┐
+    │   Cloud Run     │
+    └────────┬────────┘
+             ▼
+    ┌─────────────────┐
+    │     nginx       │
+    └─────────────────┘
+</span>
+
+<span class="muted">How it's deployed:</span>
+<span class="muted">
+    ┌─────────────────┐
+    │ GitHub Actions  │
+    └────────┬────────┘
+             ▼
+    ┌─────────────────┐
+    │   OIDC Auth     │
+    └────────┬────────┘
+             ▼
+    ┌─────────────────┐
+    │ Docker Build    │
+    └────────┬────────┘
+             ▼
+    ┌─────────────────┐
+    │   Cloud Run     │
+    └─────────────────┘
+</span>
+`,
+
+
       contact: () => `
 <span class="section-title">Contact</span>
 
   <span class="highlight">Email</span>    ${CV_DATA.personal.email}
   <span class="highlight">LinkedIn</span> ${CV_DATA.personal.linkedin}
   <span class="highlight">Location</span> ${CV_DATA.personal.location}
-
-<span class="muted">Feel free to reach out!</span>
 `,
 
       status: () => `
@@ -746,12 +785,70 @@ Site Reliability Engineer, DevOps Engineer or Platform Engineer.</span>
         return `<span class="success">Theme changed to: ${themeName}</span>`;
       },
 
-      cv: () => {
-        const link = document.createElement('a');
-        link.href = 'jonathan-gray-cv.pdf';
-        link.download = 'jonathan-gray-cv.pdf';
-        link.click();
-        return `<span class="success">Downloading CV...</span>`;
+      cv: (args) => {
+        if (args && args.trim() === '--download') {
+          const link = document.createElement('a');
+          link.href = 'jonathan-gray-cv.pdf';
+          link.download = 'jonathan-gray-cv.pdf';
+          link.click();
+          return `<span class="success">Downloading CV...</span>`;
+        }
+        return `
+<span class="section-title">Curriculum Vitae</span>
+
+<span class="highlight">Jonathan Gray</span>
+<span class="blue">Systems Development Engineer at Route 53 AWS</span>
+<span class="muted">jonathan.gray311@gmail.com | London, UK</span>
+
+<span class="skill-category">PROFILE</span>
+Site Reliability Engineer with extensive experience operating and
+enhancing highly available, global services in large production
+environments.
+
+Currently working at AWS in a team that owns a globally distributed
+highly available endpoint monitoring service. Strong background across
+Linux systems, cloud infrastructure, service reliability, and platform
+tooling. Experienced in incident response, automation, CI/CD workflows,
+deep-dive troubleshooting and implementing scalable infrastructure.
+
+<span class="skill-category">WORK EXPERIENCE</span>
+
+<span class="job-header">Amazon Web Services (AWS)</span> - Systems Development Engineer
+<span class="job-meta">Route53 Health Checks | 2021 - Present | London</span>
+
+  <span class="muted">▸</span> 24/7 on-call rotation for critical production service
+  <span class="muted">▸</span> Expanded service to 7 new commercial regions via region builds
+  <span class="muted">▸</span> Wrote region build runbook, automated tasks with IaC
+  <span class="muted">▸</span> Database migration from legacy to modern technology
+  <span class="muted">▸</span> Built tooling in Python, Bash, Ruby for CI/CD workflows
+  <span class="muted">▸</span> Service code changes in Java for migrations
+
+<span class="job-header">Mimecast</span> - Site Reliability Engineer
+<span class="job-meta">2019 - 2021 | London</span>
+
+  <span class="muted">▸</span> Multi-region production infrastructure support
+  <span class="muted">▸</span> Led Project Turbo: Java service on Kubernetes
+  <span class="muted">▸</span> On-call rotation for incidents and degradation
+
+<span class="job-header">FICO</span> - DevOps Engineer
+<span class="job-meta">2018 - 2019 | London</span>
+
+  <span class="muted">▸</span> Automated infrastructure for 3000+ servers
+  <span class="muted">▸</span> Production support and deployment workflows
+
+<span class="muted">Earlier: Forcepoint, Ultima, British Car Auctions, Phoenix IT</span>
+
+<span class="skill-category">TECHNOLOGIES</span>
+
+<span class="blue">Containers:</span>     Kubernetes, Docker
+<span class="blue">Cloud:</span>          AWS (EC2, IAM, S3, CloudFormation), Linux
+<span class="blue">Languages:</span>      Python, Bash, Ruby, Java
+<span class="blue">DevOps:</span>         Git, CI/CD, Jenkins, IaC
+<span class="blue">Databases:</span>      MySQL, PostgreSQL, MongoDB
+<span class="blue">Monitoring:</span>     CloudWatch, Prometheus, Grafana, Nagios
+
+<span class="muted">Type 'cv --download' to download as PDF</span>
+`;
       },
 
       neofetch: () => `
@@ -794,7 +891,7 @@ Site Reliability Engineer, DevOps Engineer or Platform Engineer.</span>
 <span class="highlight">Jonathan Gray</span>
 <span class="muted">Systems Development Engineer at Route 53 AWS</span>
 
-Type <span class="success">help</span> to see available commands.
+Type <span class="success">help</span> for commands
 `;
     }
 
@@ -848,6 +945,8 @@ Type <span class="success">help</span> to see available commands.
         // Empty
       } else if (command === 'theme') {
         outputEl.innerHTML += COMMANDS.theme(argsStr);
+      } else if (command === 'cv') {
+        outputEl.innerHTML += COMMANDS.cv(argsStr);
       } else if (COMMANDS[command]) {
         const result = COMMANDS[command]();
         if (result) outputEl.innerHTML += result;
